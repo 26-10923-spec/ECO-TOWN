@@ -1,0 +1,6 @@
+{
+  "name": "Eco Receipt Village",
+  "description": "영수증을 촬영/업로드하여 탄소 점수를 측정하고 기후 변화로부터 마을을 지키며 나만의 친환경 빌리지를 꾸미는 게이미피케이션 플랫폼",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gamja+Flower&family=Jua&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-game: 'Jua', 'Gaegu', 'Gamja Flower', sans-serif;
+  --font-doodle: 'Gaegu', 'Gamja Flower', sans-serif;
+}
+
+body {
+  font-family: var(--font-game);
+  background-color: #f7f4eb; /* Warm comic paper color */
+  color: #2b2b2b;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* Custom retro/comic borders & styles */
+.comic-border {
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+}
+
+.comic-border-sm {
+  border: 2px solid #000000;
+  box-shadow: 2px 2px 0px #000000;
+}
+
+.comic-button {
+  background-color: #76ba60;
+  color: white;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  font-weight: bold;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.comic-button:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000000;
+}
+
+.comic-button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+.comic-button-red {
+  background-color: #ea5a5a;
+}
+
+.comic-button-yellow {
+  background-color: #f6c84c;
+  color: #000000;
+}
+
+.comic-button-blue {
+  background-color: #55a8e6;
+}
+
+.comic-card {
+  background-color: #ffffff;
+  border: 3px solid #000000;
+  box-shadow: 6px 6px 0px #000000;
+  border-radius: 12px;
+}
+
+/* Custom scrollbar to look cute */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #f1ebd9; 
+  border-left: 2px solid #000000;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #c9bf9e; 
+  border-radius: 6px;
+  border: 3px solid #f1ebd9;
+}
