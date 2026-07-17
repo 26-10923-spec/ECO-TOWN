@@ -13,6 +13,7 @@ interface ShopProps {
 export const Shop: React.FC<ShopProps> = ({ userPoints, onBuyItem, onClose }) => {
   const [activeTab, setActiveTab] = useState<"all" | "building" | "nature">("all");
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const filteredItems = SHOP_ITEMS.filter((item) => {
     if (activeTab === "all") return true;
@@ -21,11 +22,16 @@ export const Shop: React.FC<ShopProps> = ({ userPoints, onBuyItem, onClose }) =>
 
   const handlePurchase = (item: ShopItem) => {
     if (userPoints < item.cost) {
-      alert("❌ 에코 포인트가 부족합니다! 영수증을 분석해 친환경 로컬푸드를 구매하고 포인트를 적립해 보세요.");
+      setErrorMsg("❌ 에코 포인트가 부족합니다! 영수증을 분석해 친환경 로컬푸드를 구매하고 포인트를 적립해 보세요.");
+      setSuccessMsg(null);
+      setTimeout(() => {
+        setErrorMsg(null);
+      }, 5000);
       return;
     }
 
     onBuyItem(item);
+    setErrorMsg(null);
     
     // Show a cute success message
     setSuccessMsg(`🎉 '${item.name}' 구매 성공! 인벤토리에 추가되었습니다. 마을에 배치하여 꾸며 보세요!`);
@@ -77,6 +83,13 @@ export const Shop: React.FC<ShopProps> = ({ userPoints, onBuyItem, onClose }) =>
         {successMsg && (
           <div className="bg-amber-100 border-3 border-amber-600 text-amber-900 p-3 rounded-lg mb-6 font-bold text-sm text-center animate-bounce comic-border-sm">
             {successMsg}
+          </div>
+        )}
+
+        {/* Error floating banner */}
+        {errorMsg && (
+          <div className="bg-red-100 border-3 border-red-600 text-red-900 p-3 rounded-lg mb-6 font-bold text-sm text-center animate-bounce comic-border-sm">
+            {errorMsg}
           </div>
         )}
 

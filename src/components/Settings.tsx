@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { UserAccount } from "../types";
-import { Settings as SettingsIcon, LogOut, RotateCcw, User, Shield, HelpCircle, Gamepad2 } from "lucide-react";
+import { Settings as SettingsIcon, LogOut, RotateCcw, User, Shield, HelpCircle, Gamepad2, AlertTriangle } from "lucide-react";
 
 interface SettingsProps {
   user: UserAccount;
@@ -10,27 +10,105 @@ interface SettingsProps {
 }
 
 export const Settings: React.FC<SettingsProps> = ({ user, onLogout, onResetVillage, onClose }) => {
+  const [confirmType, setConfirmType] = useState<"reset" | "logout" | null>(null);
+  const [resetFinished, setResetFinished] = useState(false);
 
   const handleResetConfirm = () => {
-    const isConfirmed = window.confirm(
-      "⚠️ 정말 마을을 초기화하시겠습니까?\n\n이 작업은 되돌릴 수 없으며, 구매하여 배치한 모든 집, 나무, 도로가 사라지고 포인트 및 기후 점수가 기본 황무지 상태(가뭄)로 리셋됩니다!"
-    );
-    if (isConfirmed) {
-      onResetVillage();
-      alert("🏜️ 마을 배치가 완전히 초기화되어 태초의 황무지로 돌아갔습니다!");
-      onClose();
-    }
+    setConfirmType("reset");
   };
 
   const handleLogoutConfirm = () => {
-    const isConfirmed = window.confirm("🚪 에코 영수증 빌리지에서 로그아웃 하시겠습니까?");
-    if (isConfirmed) {
-      onLogout();
-    }
+    setConfirmType("logout");
+  };
+
+  const executeReset = () => {
+    onResetVillage();
+    setResetFinished(true);
+  };
+
+  const executeLogout = () => {
+    onLogout();
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-[#f9f5eb]/95 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in zoom-in duration-200">
+      
+      {/* Custom Confirmation Modals */}
+      {confirmType === "reset" && (
+        <div className="fixed inset-0 z-[110] bg-black/60 flex items-center justify-center p-4">
+          <div className="comic-card max-w-sm w-full bg-white p-6 border-4 border-black text-center shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+            <AlertTriangle className="w-16 h-16 text-amber-500 mx-auto mb-4 animate-bounce" />
+            <h3 className="text-2xl font-black text-red-600 mb-2 font-game">마을 초기화 경고!</h3>
+            <p className="text-sm text-gray-700 font-doodle leading-relaxed mb-6">
+              정말로 마을을 초기화하시겠습니까?<br />
+              이 작업은 되돌릴 수 없으며, 배치한 모든 에코 빌딩과 자연물들이 사라지고 기본 황무지(가뭄) 상태로 리셋됩니다!
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={executeReset}
+                className="comic-button py-2 px-4 bg-red-500 hover:bg-red-600 text-white text-xs font-black"
+              >
+                예, 초기화합니다
+              </button>
+              <button
+                onClick={() => setConfirmType(null)}
+                className="comic-button py-2 px-4 bg-gray-200 hover:bg-gray-300 text-black text-xs font-black"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {resetFinished && (
+        <div className="fixed inset-0 z-[110] bg-black/60 flex items-center justify-center p-4">
+          <div className="comic-card max-w-sm w-full bg-white p-6 border-4 border-black text-center shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+            <RotateCcw className="w-16 h-16 text-emerald-600 mx-auto mb-4 animate-spin" style={{ animationDuration: "3s" }} />
+            <h3 className="text-2xl font-black text-emerald-800 mb-2 font-game">초기화 완료</h3>
+            <p className="text-sm text-gray-700 font-doodle leading-relaxed mb-6">
+              🏜️ 마을 배치가 완전히 초기화되어 태초의 황무지로 돌아갔습니다!
+            </p>
+            <button
+              onClick={() => {
+                setResetFinished(false);
+                setConfirmType(null);
+                onClose();
+              }}
+              className="comic-button py-2 px-6 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black w-full"
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+
+      {confirmType === "logout" && (
+        <div className="fixed inset-0 z-[110] bg-black/60 flex items-center justify-center p-4">
+          <div className="comic-card max-w-sm w-full bg-white p-6 border-4 border-black text-center shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+            <LogOut className="w-16 h-16 text-blue-500 mx-auto mb-4 animate-pulse" />
+            <h3 className="text-2xl font-black text-blue-900 mb-2 font-game">안전한 로그아웃</h3>
+            <p className="text-sm text-gray-700 font-doodle leading-relaxed mb-6">
+              에코 영수증 빌리지에서 로그아웃 하시겠습니까?<br />
+              현재 마을 데이터는 기기에 안전하게 실시간 보존됩니다.
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={executeLogout}
+                className="comic-button py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white text-xs font-black"
+              >
+                예, 로그아웃합니다
+              </button>
+              <button
+                onClick={() => setConfirmType(null)}
+                className="comic-button py-2 px-4 bg-gray-200 hover:bg-gray-300 text-black text-xs font-black"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="comic-card w-full max-w-md bg-white p-6 relative">
         
         {/* Close button */}
